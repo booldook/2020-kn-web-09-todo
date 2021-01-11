@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>TODO APP</title>
+	<link rel="stylesheet" href="../css/all.min.css">
+	<link rel="stylesheet" href="../css/bootstrap.min.css">
+	<link rel="stylesheet" href="../css/reset.css">
+	<link rel="stylesheet" href="../css/animate3.min.css">
+	<link rel="stylesheet" href="../css/index.css">
+	<script defer src="/__/firebase/8.2.2/firebase-app.js"></script>
+	<script defer src="/__/firebase/8.2.2/firebase-auth.js"></script>
+	<script defer src="/__/firebase/8.2.2/firebase-database.js"></script>
+	<script defer src="/__/firebase/8.2.2/firebase-storage.js"></script>
+	<script defer src="/__/firebase/8.2.2/firebase-analytics.js"></script>
+	<script defer src="/__/firebase/init.js?useEmulator=true"></script>
+	<script defer src="../js/jquery-3.5.1.min.js"></script>
+	<script defer src="../js/index.js"></script>
+</head>
+<body>
+	<header class="header-wrapper">
+		<h1 class="title-wrap">
+			<i class="fa fa-tasks"></i> TODO App
+		</h1>
+		<div class="sign-wrap">
+			<div class="icon">
+				<img src="https://via.placeholder.com/36" alt="아이콘" class="mw-100">
+			</div>
+			<div class="email"></div>
+			<button class="btn btn-danger" id="btLogout">
+				<i class="fa fa-sign-out-alt"></i> 로그아웃
+			</button>
+		</div>
+	</header>
+	<div class="auth-wrapper modal-wrapper">
+		<button class="btn btn-danger" id="btGoogleLogin">
+			<i class="fab fa-google mr-2"></i> Google 로그인
+		</button>
+	</div>
+</body>
+</html>
