@@ -31,8 +31,8 @@
 	.sign-wrap .email {display: none;}
 	#btLogout::after {content: '';}
 
-	.content-wrapper .list-wrapper {position: absolute; width: 80%;}
-	.content-wrapper .edit-wrapper {flex: 00 100%;}
+	.content-wrapper .list-wrapper {position: absolute; width: 80%; box-shadow: 4px 0 6px rgba(0,0,0,0.4);}
+	.content-wrapper .edit-wrapper {flex: 0 0 100%;}
 }
 
 @media screen and (max-width: 575px) {
