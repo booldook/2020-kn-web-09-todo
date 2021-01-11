@@ -7,7 +7,7 @@
 .header-wrapper .sign-wrap .email {margin-right: 1em;}
 #btLogout::after {content: 'Logout'; display: inline-block;}
 
-.content-wrapper {width: 100%; height: calc(100vh - 94px); position: relative; margin-top: 24px; display: flex;}
+.content-wrapper {width: 100%; height: calc(100vh - 70px); position: relative; display: flex;}
 .content-wrapper > div {flex: 0 0 50%; padding: 1em; height: 100%;}
 .content-wrapper .list-wrapper {background-image: linear-gradient(to right, #c6e987, #309138);}
 .list-wrapper .add-wrap {padding: 0.5em 0; background-color: rgba(255,255,255,0.4); margin: 0.25em; border-radius: 4px; display: flex; align-items: center;}
@@ -30,6 +30,9 @@
 @media screen and (max-width: 767px) {
 	.sign-wrap .email {display: none;}
 	#btLogout::after {content: '';}
+
+	.content-wrapper .list-wrapper {position: absolute; width: 80%;}
+	.content-wrapper .edit-wrapper {flex: 00 100%;}
 }
 
 @media screen and (max-width: 575px) {
