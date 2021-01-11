@@ -6,17 +6,34 @@ var ref = null;
 var google = new firebase.auth.GoogleAuthProvider();
 var facebook = new firebase.auth.FacebookAuthProvider();
 
-/************** 이벤트등록 ***************/
-auth.languageCode = 'ko';
-auth.onAuthStateChanged(onAuthChg);
 
-$('#btGoogleLogin').click(onGoogleLogin);
-$('#btLogout').click(onLogout);
+
+/************** 사용자함수 ***************/
+function dbInit() {
+	db.ref('root/todo/'+user.uid).on('child_added', onAdd);
+	db.ref('root/todo/'+user.uid).on('child_removed', onRev);
+	db.ref('root/todo/'+user.uid).on('child_changed', onChg);
+}
+
 
 
 /************** 이벤트콜백 ***************/
+function onAdd(r) {
+	console.log(r.val());
+}
+
+function onRev(r) {
+	console.log(r.val());
+}
+
+function onChg(r) {
+	console.log(r.val());
+}
+
+
 function onAuthChg(r) {
 	if(r) {
+		console.log(r);
 		user = r;
 		$('.sign-wrap .icon img').attr('src', user.photoURL);
 		$('.sign-wrap .email').html(user.email);
@@ -41,21 +58,12 @@ function onLogout() {
 	auth.signOut();
 }
 
-function onAdded(r) {
-	$('.list-wrapper').prepend('<div style="padding: 1em; border-bottom:1px solid #ccc">'+r.val().comment+'</div>');
-}
 
-function onSubmit(f) {
-	var comment = f.comment.value;
-	ref.push({
-		comment: comment
-	});
-	
-	return false;
-}
 
-/************** 사용자함수 ***************/
-function dbInit() {
-	ref = db.ref('root/todo/'+user.uid);
-	ref.on('child_added', onAdded);	
-}
+
+/************** 이벤트등록 ***************/
+auth.languageCode = 'ko';
+auth.onAuthStateChanged(onAuthChg);
+
+$('#btGoogleLogin').click(onGoogleLogin);
+$('#btLogout').click(onLogout);

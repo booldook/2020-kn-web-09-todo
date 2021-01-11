@@ -5,3 +5,22 @@
 .header-wrapper .sign-wrap {display: flex; align-items: center;}
 .header-wrapper .sign-wrap .icon {width: 36px; height: 36px; margin-right: 1em; border-radius: 50%; overflow: hidden;}
 .header-wrapper .sign-wrap .email {margin-right: 1em;}
+#btLogout::after {content: 'Logout'; display: inline-block;}
+
+
+@media screen and (max-width: 1199px) {
+	
+}
+
+@media screen and (max-width: 991px) {
+	
+}
+
+@media screen and (max-width: 767px) {
+	.sign-wrap .email {display: none;}
+	#btLogout::after {content: '';}
+}
+
+@media screen and (max-width: 575px) {
+
+}
