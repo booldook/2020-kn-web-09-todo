@@ -2,6 +2,7 @@
 var auth = firebase.auth();
 var db = firebase.database();
 var user = null;
+var ref = null;
 var google = new firebase.auth.GoogleAuthProvider();
 var facebook = new firebase.auth.FacebookAuthProvider();
 
@@ -21,6 +22,7 @@ function onAuthChg(r) {
 		$('.sign-wrap .email').html(user.email);
 		$('.modal-wrapper.auth-wrapper').hide();
 		$('#btLogout').show();
+		dbInit();
 	}
 	else {
 		user = null;
@@ -39,4 +41,21 @@ function onLogout() {
 	auth.signOut();
 }
 
+function onAdded(r) {
+	$('.list-wrapper').prepend('<div style="padding: 1em; border-bottom:1px solid #ccc">'+r.val().comment+'</div>');
+}
+
+function onSubmit(f) {
+	var comment = f.comment.value;
+	ref.push({
+		comment: comment
+	});
+	
+	return false;
+}
+
 /************** 사용자함수 ***************/
+function dbInit() {
+	ref = db.ref('root/todo/'+user.uid);
+	ref.on('child_added', onAdded);	
+}
