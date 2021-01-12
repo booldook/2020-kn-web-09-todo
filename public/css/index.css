@@ -21,6 +21,14 @@
 .list-wrapper .list-wrap > li > i {display: none;}
 .list-wrapper .list-wrap > li > i.active {display: inline-block;}
 
+.bt-done {margin: 0.5em 0.25em 0 0; display: inline-block;}
+.bt-done:link,
+.bt-done:visited,
+.bt-done:active,
+.bt-done:hover {color: #f9f9f9; text-decoration: none;}
+.bt-done::after {content: '보이기'; display: inline-block;}
+.bt-done.active::after {content: '감추기'; display: inline-block;}
+
 @media screen and (max-width: 1199px) {
 	
 }

@@ -36,6 +36,23 @@ function onCheck(el, chk) {
 	}
 }
 
+function onDoneClick() {
+	$('.bt-done').toggleClass('active');
+	var ref = db.ref('root/todo/'+user.uid);
+	if( $('.bt-done').hasClass('active') ) { //감추기
+		ref.orderByChild('checked').equalTo(false).once('value').then(onGetData);
+	}
+	else {	//보이기
+		ref.once('value').then(onGetData);
+	}
+}
+
+function onGetData(r) {
+	for(var i in r.val()){
+		console.log(r.val()[i].task);
+	}
+}
+
 function onSubmit(f) {
 	var data = {
 		task: f.task.value,
@@ -74,21 +91,19 @@ function onChg(r) {
 
 
 function onAuthChg(r) {
+	user = r;
 	if(r) {
-		console.log(r);
-		user = r;
 		$('.sign-wrap .icon img').attr('src', user.photoURL);
 		$('.sign-wrap .email').html(user.email);
 		$('.modal-wrapper.auth-wrapper').hide();
-		$('#btLogout').show();
+		$('.sign-wrap').show();
 		dbInit();
 	}
 	else {
-		user = null;
 		$('.sign-wrap .icon img').attr('src', 'https://via.placeholder.com/36');
 		$('.sign-wrap .email').html('');
 		$('.modal-wrapper.auth-wrapper').show();
-		$('#btLogout').hide();
+		$('.sign-wrap').hide();
 	}
 }
 

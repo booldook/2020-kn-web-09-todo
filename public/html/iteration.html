@@ -1,0 +1,19 @@
+<script>
+	// Iteration 반복
+	// JS의 iteration: 배열, 객체
+
+	// var arr = ['A', 'B', 'C'];
+	var arr = { a: 'A', b: 'B', c: 'C' };
+	for(var i=0; i<arr.length; i++) {
+		console.log(arr[i]);
+	}
+	for(var i in arr) {	// 객체도 반복한다.
+		console.log(arr[i]);
+	}
+	for(var v of arr) {	// ES6
+		console.log(v);
+	}
+	arr.forEach(function(v, i){
+		console.log(v);
+	});
+</script>
