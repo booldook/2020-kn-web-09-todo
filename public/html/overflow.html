@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>overflow</title>
+	<link rel="stylesheet" href="../css/reset.css">
+	<style>
+		.wrapper {max-width: 800px; height: 200px; overflow-y: auto; margin: auto;}
+		.wrapper .box {font-size: 2em;}
+	</style>
+	<script src="../js/jquery-3.5.1.min.js"></script>
+</head>
+<body>
+	<div class="wrapper">
+		<div class="box">
+			Lorem ipsum dolor sit amet consectetur, adipisicing elit. Doloremque amet eius laborum soluta nostrum sed accusamus sapiente, voluptas perferendis quod iusto harum impedit delectus dicta tempora laboriosam facilis recusandae. Repellat.Lore Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusantium delectus eius voluptatem enim perferendis officiis nesciunt ad corrupti dolorem doloribus ut, nihil inventore, laboriosam at. Similique obcaecati assumenda consequatur ea.
+		</div>
+	</div>
+	<script>
+		$('.wrapper').scroll(onScroll);
+		function onScroll() {
+			console.log($(this).scrollTop());
+		}
+	</script>
+</body>
+</html>

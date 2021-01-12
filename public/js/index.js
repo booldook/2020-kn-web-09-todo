@@ -16,10 +16,52 @@ function dbInit() {
 }
 
 
-
 /************** 이벤트콜백 ***************/
+var timeout;
+function onCheck(el, chk) {
+	$(el).siblings('i').addClass('active');
+	$(el).removeClass('active');
+	if(chk) {
+		timeout = setTimeout(function(){ 
+			$(el).parent().css('opacity', 0);
+			setTimeout(function(){
+				var data = { checked: true };
+				$(el).parent().remove();
+				db.ref('root/todo/'+user.uid+'/'+$(el).parent().attr('id')).update(data)
+			}, 750) 
+		}, 3000);
+	}
+	else {
+		clearTimeout(timeout);
+	}
+}
+
+function onSubmit(f) {
+	var data = {
+		task: f.task.value,
+		createdAt: new Date().getTime(),
+		checked: false,
+	}
+	if(f.task.value !== '') db.ref('root/todo/'+user.uid).push(data);
+	return false;
+}
+
 function onAdd(r) {
-	console.log(r.val());
+	// console.log(r.key);
+	// console.log(r.val());
+	if(!r.val().checked) {
+		var html  = '<li id="'+r.key+'">';
+		html += '	<i class="active far fa-circle" onclick="onCheck(this, true);"></i>';
+		html += '	<i class="far fa-check-circle" onclick="onCheck(this, false);"></i>';
+		html += '	<span>'+r.val().task+'</span>';
+		html += '</li>';
+		var $li = $(html).prependTo($(".list-wrap"));
+		$li.css("opacity");
+		$li.css("opacity", 1);
+	}
+
+	// $(".add-wrap")[0].reset();
+	document.querySelector(".add-wrap").reset();
 }
 
 function onRev(r) {
@@ -27,7 +69,7 @@ function onRev(r) {
 }
 
 function onChg(r) {
-	console.log(r.val());
+	
 }
 
 

@@ -9,13 +9,15 @@
 
 .content-wrapper {width: 100%; height: calc(100vh - 70px); position: relative; display: flex;}
 .content-wrapper > div {flex: 0 0 50%; padding: 1em; height: 100%;}
-.content-wrapper .list-wrapper {background-image: linear-gradient(to right, #c6e987, #309138);}
-.list-wrapper .add-wrap {padding: 0.5em 0; background-color: rgba(255,255,255,0.4); margin: 0.25em; border-radius: 4px; display: flex; align-items: center;}
-.list-wrapper .add-wrap > .fa-plus {margin-left: 0.5em; color: #f9f9f9; font-size: 1.75em;}
+.content-wrapper .list-wrapper {background-image: linear-gradient(to right, #c6e987, #309138); display: flex; flex-direction: column;}
+.list-wrapper .add-wrap {flex: 0 0; padding: 0.5em 0; background-color: rgba(255,255,255,0.4); margin: 0.25em; border-radius: 4px; display: flex; align-items: center;}
+.list-wrapper .add-wrap > button {background-color: transparent; border: none;}
+.list-wrapper .add-wrap > button:focus {outline: none;}
+.list-wrapper .add-wrap .fa-plus {margin-left: 0.5em; color: #f9f9f9; font-size: 1.75em;}
 .list-wrapper .add-wrap > .form-control {background-color: transparent; border: none; outline: none; flex-grow: 1; font-size: 1.25em;}
 .list-wrapper .add-wrap > .form-control:focus {box-shadow: none;}
-.list-wrapper .list-wrap {margin-top: 1em;}
-.list-wrapper .list-wrap > li {padding: 1em; background-color: rgba(0,0,0,0.6); margin: 0.25em; color: #f9f9f9; font-size: 1.25em; border-radius: 4px;}
+.list-wrapper .list-wrap {flex: 1 1 100%; margin-top: 1em; overflow: auto;}
+.list-wrapper .list-wrap > li {padding: 1em; background-color: rgba(0,0,0,0.6); margin: 0.25em; color: #f9f9f9; font-size: 1.25em; border-radius: 4px; transition: all 0.75s; opacity: 0;}
 .list-wrapper .list-wrap > li > i {display: none;}
 .list-wrapper .list-wrap > li > i.active {display: inline-block;}
 

@@ -36,16 +36,12 @@
 
 	<div class="content-wrapper">
 		<div class="list-wrapper">
-			<div class="add-wrap">
-				<i class="fa fa-plus"></i>
-				<input type="test" id="task" class="form-control" autofocus>
-			</div>
+			<form class="add-wrap" onsubmit="return onSubmit(this);">
+				<button type="submit"><i class="fa fa-plus"></i></button>
+				<input type="text" name="task" class="form-control" autofocus>
+			</form>
 			<ul class="list-wrap">
-				<li>
-					<i class="active far fa-circle"></i>
-					<i class="far fa-check-circle"></i>
-					<span>우유/고기 사기</span>
-				</li>
+				
 			</ul>
 		</div>
 		<div class="edit-wrapper">
