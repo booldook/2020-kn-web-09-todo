@@ -3,6 +3,7 @@ var auth = firebase.auth();
 var db = firebase.database();
 var user = null;
 var ref = null;
+var key = null;
 var google = new firebase.auth.GoogleAuthProvider();
 var facebook = new firebase.auth.FacebookAuthProvider();
 
@@ -49,22 +50,51 @@ function toggleList() {
 
 
 /************** 이벤트콜백 ***************/
+function onReset(f) {
+	f.key.value = '';
+	$('.edit-wrapper').find('button.btn-primary').removeClass('d-none');
+	$('.edit-wrapper').find('button.btn-success').addClass('d-none');
+}
+
+function onGetTask(r) {
+	$('.edit-wrapper').find('form input[name="key"]').val( r.key );
+	$('.edit-wrapper').find('form input[name="task"]').val( r.val().task );
+	$('.edit-wrapper').find('form textarea[name="comment"]').val( r.val().comment );
+	$('.edit-wrapper').find('button.btn-primary').addClass('d-none');
+	$('.edit-wrapper').find('button.btn-success').removeClass('d-none');
+}
+
+function onEdit(f) {
+	var key = f.key.value;
+	var data = { 
+		task: f.task.value, 
+		comment: f.comment.value, 
+		createdAt: new Date().getTime(), 
+		checked: false 
+	};
+	if(key == "") {
+		db.ref('root/todo/'+user.uid).push(data);
+	}
+	else {
+		db.ref('root/todo/'+user.uid+'/'+key).update(data);
+	}
+	f.key.value = '';
+	f.reset();
+	return false;
+}
+
 function onFocus(el) {
 	$(el).parent().addClass('active');
-	$('.edit-wrapper input[name="task"]').val($(el).val());
+	key = $(el).parent().attr('id');
+	db.ref('root/todo/'+user.uid+'/'+key).once('value').then(onGetTask);
 }
 
 function onBlur(el) {
 	$(el).parent().removeClass('active');
-	$('.edit-wrapper input[name="task"]').val('');
 }
 
 function onKeyup(el) {
 	$('.edit-wrapper input[name="task"]').val($(el).val());
-}
-
-function onKeyup2(el) {
-	$('.list-wrapper input[name="task"]').val($(el).val());
 }
 
 function onChange(k, v) {

@@ -49,11 +49,15 @@
 		</div>
 		<div class="edit-wrapper">
 			<form onsubmit="return onEdit(this)">
-				<input type="text" name="task" class="form-control" placeholder="할일을 입력하세요" onkeyup="onKeyup2(this);">
+				<input type="hidden" name="key" value="">
+				<input type="text" name="task" class="form-control" placeholder="할일을 입력하세요">
 				<textarea name="comment" class="form-control" placeholder="내용을 입력하세요"></textarea>
 				<input type="file" name="upfile" class="form-control-file">
 				<hr>
-				<button class="btn btn-success mx-auto">저장</button>
+				<button class="btn btn-success mx-auto d-none">수정</button>
+				<button class="btn btn-primary mx-auto">새로운 할일 저장</button>
+				<button type="reset" class="btn btn-warning mx-auto" 
+				onclick="onReset(this.form)">취소</button>
 			</form>
 		</div>
 	</div>
