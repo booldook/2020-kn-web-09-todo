@@ -25,7 +25,7 @@ function addHTML(k, v) {
 		html += '<i class="active far fa-circle" onclick="onCheck(\''+k+'\', true);"></i>';
 		html += '<i class="far fa-check-circle" onclick="onCheck(\''+k+'\', false);"></i>';
 	}
-	html += '<input type="text" class="ml-3" value="'+v.task+'" onchange="onChange(\''+k+'\', this);">';
+	html += '<input type="text" class="ml-3" value="'+v.task+'" onchange="onChange(\''+k+'\', this);" onfocus="onFocus(this);" onblur="onBlur(this);">';
 	html += '<div class="date">'+moment(v.createdAt).format('llll')+'</div>';
 	html += '<button class="btn btn-sm btn-danger bt-delete" onclick="onDelete(\''+k+'\');">삭제</button>';
 	html += '</li>';
@@ -49,6 +49,24 @@ function toggleList() {
 
 
 /************** 이벤트콜백 ***************/
+function onFocus(el) {
+	$(el).parent().addClass('active');
+	$('.edit-wrapper input[name="task"]').val($(el).val());
+}
+
+function onBlur(el) {
+	$(el).parent().removeClass('active');
+	$('.edit-wrapper input[name="task"]').val('');
+}
+
+function onKeyup(el) {
+	$('.edit-wrapper input[name="task"]').val($(el).val());
+}
+
+function onKeyup2(el) {
+	$('.list-wrapper input[name="task"]').val($(el).val());
+}
+
 function onChange(k, v) {
 	db.ref('root/todo/'+user.uid+'/'+k).update({ task: v.value });
 }
