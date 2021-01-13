@@ -26,8 +26,8 @@
 .bt-done:visited,
 .bt-done:active,
 .bt-done:hover {color: #f9f9f9; text-decoration: none;}
-.bt-done::after {content: '보이기'; display: inline-block;}
-.bt-done.active::after {content: '감추기'; display: inline-block;}
+.bt-done::after {content: '감추기'; display: inline-block;}
+.bt-done.active::after {content: '보이기'; display: inline-block;}
 
 @media screen and (max-width: 1199px) {
 	

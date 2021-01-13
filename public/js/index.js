@@ -15,6 +15,22 @@ function dbInit() {
 	db.ref('root/todo/'+user.uid).on('child_changed', onChg);
 }
 
+function getHTML(k, v) {
+	var html  = '<li id="'+k+'">';
+	if(v.checked) {
+		html += '<i class="far fa-circle" onclick="onCheck(this, true);"></i>';
+		html += '<i class="active far fa-check-circle" onclick="onCheck(this, false);"></i>';
+	}
+	else {
+		html += '<i class="active far fa-circle" onclick="onCheck(this, true);"></i>';
+		html += '<i class="far fa-check-circle" onclick="onCheck(this, false);"></i>';
+	}
+	html += '<span class="ml-3">'+v.task+'</span>';
+	html += '<span class="ml-3">'+v.createdAt+'</span>';
+	html += '</li>';
+	return html;
+}
+
 
 /************** 이벤트콜백 ***************/
 var timeout;
@@ -47,10 +63,27 @@ function onDoneClick() {
 	}
 }
 
+/*
+var obj = {
+	a: {aa: 'A', bb: 'B'},
+	b: {aa: 'C', bb: 'D'},
+	i: {}
+	val: function() {
+
+	},
+	key: 'asdfase4r'
+}
+obj.a.aa === obj[a].aa === obj[a][aa]
+*/
+
 function onGetData(r) {
-	for(var i in r.val()){
-		console.log(r.val()[i].task);
-	}
+	$('.list-wrap').empty();
+	r.forEach(function(v){
+		// console.log(v.key, v.val());
+		var $li = $( getHTML( v.key, v.val() ) ).prependTo($(".list-wrap"));
+		$li.css("opacity");
+		$li.css("opacity", 1);
+	});
 }
 
 function onSubmit(f) {
@@ -64,19 +97,14 @@ function onSubmit(f) {
 }
 
 function onAdd(r) {
+	// console.log(r);
 	// console.log(r.key);
 	// console.log(r.val());
 	if(!r.val().checked) {
-		var html  = '<li id="'+r.key+'">';
-		html += '	<i class="active far fa-circle" onclick="onCheck(this, true);"></i>';
-		html += '	<i class="far fa-check-circle" onclick="onCheck(this, false);"></i>';
-		html += '	<span>'+r.val().task+'</span>';
-		html += '</li>';
-		var $li = $(html).prependTo($(".list-wrap"));
+		var $li = $(getHTML(r.key, r.val())).prependTo($(".list-wrap"));
 		$li.css("opacity");
 		$li.css("opacity", 1);
 	}
-
 	// $(".add-wrap")[0].reset();
 	document.querySelector(".add-wrap").reset();
 }
