@@ -49,9 +49,8 @@ function toggleList() {
 
 
 /************** 이벤트콜백 ***************/
-function onChange(key) {
-	console.log(this);
-	// db.ref('root/todo/'+user.uid+'/'+key).update({ task: chk });
+function onChange(k, v) {
+	db.ref('root/todo/'+user.uid+'/'+k).update({ task: v.value });
 }
 
 function onDelete(key) {
@@ -84,19 +83,6 @@ function onDoneClick() {
 	toggleList();
 }
 
-/*
-var obj = {
-	a: {aa: 'A', bb: 'B'},
-	b: {aa: 'C', bb: 'D'},
-	i: {}
-	val: function() {
-
-	},
-	key: 'asdfase4r'
-}
-obj.a.aa === obj[a].aa === obj[a][aa]
-*/
-
 function onGetData(r) {
 	$('.list-wrap').empty();
 	r.forEach(function(v){
@@ -122,15 +108,6 @@ function onAdd(r) {
 	// $(".add-wrap")[0].reset();
 	document.querySelector(".add-wrap").reset();
 }
-
-function onRev(r) {
-	console.log(r.val());
-}
-
-function onChg(r) {
-	
-}
-
 
 function onAuthChg(r) {
 	user = r;
