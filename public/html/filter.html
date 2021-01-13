@@ -12,11 +12,28 @@ var ref = null;
 var google = new firebase.auth.GoogleAuthProvider();
 auth.onAuthStateChanged(function(r){
 	user = r;
-	db.ref('root/todo/'+user.uid).once('value').then(onGetList);
+	db.ref('root/todo/'+user.uid).on('child_added', function(r) {}); 
+	db.ref('root/todo/'+user.uid).on('child_removed', function(r) {}); 
+	db.ref('root/todo/'+user.uid).on('child_changed', function(r) {}); 
+	db.ref('root/todo/'+user.uid).once('value').then(onGetList); 
 });
 auth.signInWithPopup(google);
 
 function onGetList(r) {
-	console.log(r.val());
+	var done = [];
+	var will = [];
+	r.forEach(function(v, i) {
+		if(v.val().checked) done.push(v);
+		else will.push(v);
+	});
+	console.log(done, will);
+	
+	var done = [];
+	var will = [];
+	for(var i in r.val()){
+		if(r.val()[i].checked) done.push(r.val()[i]);
+		else will.push(r.val()[i]);
+	}
+	console.log(done, will);
 }
 </script>

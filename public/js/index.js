@@ -11,22 +11,23 @@ var facebook = new firebase.auth.FacebookAuthProvider();
 /************** 사용자함수 ***************/
 function dbInit() {
 	db.ref('root/todo/'+user.uid).on('child_added', onAdd);
-	db.ref('root/todo/'+user.uid).on('child_removed', onRev);
-	db.ref('root/todo/'+user.uid).on('child_changed', onChg);
+	db.ref('root/todo/'+user.uid).on('child_removed', toggleList);
+	db.ref('root/todo/'+user.uid).on('child_changed', toggleList);
 }
 
 function addHTML(k, v) {
 	var html  = '<li id="'+k+'" class="'+(v.checked ? 'opacity': '')+'">';
 	if(v.checked) {
-		html += '<i class="far fa-circle" onclick="onCheck(this, true);"></i>';
-		html += '<i class="active far fa-check-circle" onclick="onCheck(this, false);"></i>';
+		html += '<i class="far fa-circle" onclick="onCheck(\''+k+'\', true);"></i>';
+		html += '<i class="active far fa-check-circle" onclick="onCheck(\''+k+'\', false);"></i>';
 	}
 	else {
-		html += '<i class="active far fa-circle" onclick="onCheck(this, true);"></i>';
-		html += '<i class="far fa-check-circle" onclick="onCheck(this, false);"></i>';
+		html += '<i class="active far fa-circle" onclick="onCheck(\''+k+'\', true);"></i>';
+		html += '<i class="far fa-check-circle" onclick="onCheck(\''+k+'\', false);"></i>';
 	}
-	html += '<span class="ml-3">'+v.task+'</span>';
-	html += '<span class="date">'+moment(v.createdAt).format('llll')+'</span>';
+	html += '<input type="text" class="ml-3" value="'+v.task+'" onchange="onChange(\''+k+'\', this);">';
+	html += '<div class="date">'+moment(v.createdAt).format('llll')+'</div>';
+	html += '<button class="btn btn-sm btn-danger bt-delete" onclick="onDelete(\''+k+'\');">삭제</button>';
 	html += '</li>';
 
 	var $li = $(html).prependTo($(".list-wrap"));
@@ -36,10 +37,30 @@ function addHTML(k, v) {
 	return $li;
 }
 
+function toggleList() {
+	var ref = db.ref('root/todo/'+user.uid);
+	if( $('.bt-done').hasClass('active') ) { //감추기
+		ref.orderByChild('checked').equalTo(false).once('value').then(onGetData);
+	}
+	else {	//보이기
+		ref.once('value').then(onGetData);
+	}
+}
+
 
 /************** 이벤트콜백 ***************/
-var timeout;
-function onCheck(el, chk) {
+function onChange(key) {
+	console.log(this);
+	// db.ref('root/todo/'+user.uid+'/'+key).update({ task: chk });
+}
+
+function onDelete(key) {
+	db.ref('root/todo/'+user.uid+'/'+key).remove();
+}
+
+function onCheck(key, chk) {
+	db.ref('root/todo/'+user.uid+'/'+key).update({ checked: chk });
+	/*
 	$(el).siblings('i').addClass('active');
 	$(el).removeClass('active');
 	if(chk) {
@@ -55,17 +76,12 @@ function onCheck(el, chk) {
 	else {
 		clearTimeout(timeout);
 	}
+	*/
 }
 
 function onDoneClick() {
 	$('.bt-done').toggleClass('active');
-	var ref = db.ref('root/todo/'+user.uid);
-	if( $('.bt-done').hasClass('active') ) { //감추기
-		ref.orderByChild('checked').equalTo(false).once('value').then(onGetData);
-	}
-	else {	//보이기
-		ref.once('value').then(onGetData);
-	}
+	toggleList();
 }
 
 /*
@@ -84,7 +100,10 @@ obj.a.aa === obj[a].aa === obj[a][aa]
 function onGetData(r) {
 	$('.list-wrap').empty();
 	r.forEach(function(v){
-		addHTML(v.key, v.val());
+		if(v.val().checked) addHTML(v.key, v.val());
+	});
+	r.forEach(function(v){
+		if(!v.val().checked) addHTML(v.key, v.val());
 	});
 }
 
