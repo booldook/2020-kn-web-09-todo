@@ -15,8 +15,8 @@ function dbInit() {
 	db.ref('root/todo/'+user.uid).on('child_changed', onChg);
 }
 
-function getHTML(k, v) {
-	var html  = '<li id="'+k+'">';
+function addHTML(k, v) {
+	var html  = '<li id="'+k+'" class="'+(v.checked ? 'opacity': '')+'">';
 	if(v.checked) {
 		html += '<i class="far fa-circle" onclick="onCheck(this, true);"></i>';
 		html += '<i class="active far fa-check-circle" onclick="onCheck(this, false);"></i>';
@@ -26,9 +26,14 @@ function getHTML(k, v) {
 		html += '<i class="far fa-check-circle" onclick="onCheck(this, false);"></i>';
 	}
 	html += '<span class="ml-3">'+v.task+'</span>';
-	html += '<span class="ml-3">'+v.createdAt+'</span>';
+	html += '<span class="date">'+moment(v.createdAt).format('llll')+'</span>';
 	html += '</li>';
-	return html;
+
+	var $li = $(html).prependTo($(".list-wrap"));
+	$li.css("opacity");
+	$li.css("opacity", 1);
+
+	return $li;
 }
 
 
@@ -79,10 +84,7 @@ obj.a.aa === obj[a].aa === obj[a][aa]
 function onGetData(r) {
 	$('.list-wrap').empty();
 	r.forEach(function(v){
-		// console.log(v.key, v.val());
-		var $li = $( getHTML( v.key, v.val() ) ).prependTo($(".list-wrap"));
-		$li.css("opacity");
-		$li.css("opacity", 1);
+		addHTML(v.key, v.val());
 	});
 }
 
@@ -97,14 +99,7 @@ function onSubmit(f) {
 }
 
 function onAdd(r) {
-	// console.log(r);
-	// console.log(r.key);
-	// console.log(r.val());
-	if(!r.val().checked) {
-		var $li = $(getHTML(r.key, r.val())).prependTo($(".list-wrap"));
-		$li.css("opacity");
-		$li.css("opacity", 1);
-	}
+	if(!r.val().checked) addHTML(r.key, r.val());
 	// $(".add-wrap")[0].reset();
 	document.querySelector(".add-wrap").reset();
 }
@@ -149,6 +144,7 @@ function onLogout() {
 /************** 이벤트등록 ***************/
 auth.languageCode = 'ko';
 auth.onAuthStateChanged(onAuthChg);
+moment.locale('ko');
 
 $('#btGoogleLogin').click(onGoogleLogin);
 $('#btLogout').click(onLogout);

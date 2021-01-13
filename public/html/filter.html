@@ -1,0 +1,22 @@
+<script src="/__/firebase/8.2.2/firebase-app.js"></script>
+<script src="/__/firebase/8.2.2/firebase-auth.js"></script>
+<script src="/__/firebase/8.2.2/firebase-database.js"></script>
+<script src="/__/firebase/init.js?useEmulator=true"></script>
+<script src="../js/jquery-3.5.1.min.js"></script>
+<script src="../js/moment-with-locales.min.js"></script>
+<script>
+var auth = firebase.auth();
+var db = firebase.database();
+var user = null;
+var ref = null;
+var google = new firebase.auth.GoogleAuthProvider();
+auth.onAuthStateChanged(function(r){
+	user = r;
+	db.ref('root/todo/'+user.uid).once('value').then(onGetList);
+});
+auth.signInWithPopup(google);
+
+function onGetList(r) {
+	console.log(r.val());
+}
+</script>
