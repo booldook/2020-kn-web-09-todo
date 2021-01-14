@@ -11,7 +11,14 @@
 
 .content-wrapper {width: 100%; height: calc(100vh - 70px); position: relative; display: flex;}
 .content-wrapper > div {flex: 0 0 50%; padding: 1em; height: 100%;}
-.content-wrapper .list-wrapper {background-image: linear-gradient(to right, #c6e987, #309138); display: flex; flex-direction: column;}
+.content-wrapper .list-wrapper {background-image: linear-gradient(to right, #c6e987, #309138); display: flex; flex-direction: column; z-index: 99; transition: all 0.5s;}
+.content-wrapper .list-wrapper .bt-close {background-color: darkred; color: #f9f9f9; width: 40px; height: 40px; text-align: center; line-height: 40px; position: absolute; top: 1.75em; right: -40px; display: none; cursor: pointer; }
+
+.list-wrapper {transform: translateX(0);}
+.list-wrapper.active {transform: translateX(0);}
+
+.list-wrapper .bt-close::after {content: '〉'; display: inline-block;} 
+.list-wrapper .bt-close.active::after {content: '〈'; display: inline-block;} 
 .list-wrapper .add-wrap {flex: 0 0; padding: 0.5em 0; background-color: rgba(255,255,255,0.4); margin: 0.25em; border-radius: 4px; display: flex; align-items: center;}
 .list-wrapper .add-wrap > button {background-color: transparent; border: none;}
 .list-wrapper .add-wrap > button:focus {outline: none;}
@@ -61,7 +68,11 @@
 	#btLogout::after {content: '';}
 
 	.content-wrapper .list-wrapper {position: absolute; width: 80%; box-shadow: 4px 0 6px rgba(0,0,0,0.4);}
-	.content-wrapper .edit-wrapper {flex: 0 0 100%;}
+	.content-wrapper .list-wrapper .bt-close {display: block;}
+
+	.content-wrapper .edit-wrapper {flex: 0 0 100%; padding-left: 15%;}
+
+	.list-wrapper.active {transform: translateX(-98%);}
 }
 
 @media screen and (max-width: 575px) {

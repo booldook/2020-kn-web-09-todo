@@ -274,7 +274,15 @@ function onLogout() {
 	auth.signOut();
 }
 
-
+function onListToggle() {
+	$(this).toggleClass('active');
+	if($(this).hasClass('active')) {
+		$('.list-wrapper').removeClass('active');
+	}
+	else {
+		$('.list-wrapper').addClass('active');
+	}
+}
 
 
 /************** 이벤트등록 ***************/
@@ -290,3 +298,5 @@ $('.img-wrapper.modal-wrapper img').click(function(e){
 $('.img-wrapper.modal-wrapper').click(function(){
 	$(this).css('display', 'none');
 });
+
+$('.list-wrapper .bt-close').click(onListToggle);
