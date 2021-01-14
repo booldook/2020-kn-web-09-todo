@@ -91,6 +91,7 @@ function onFileDelete(el) {
 
 function onReset(f) {
 	f.key.value = '';
+	f.reset();
 	$('.edit-wrapper').find('button.btn-primary').removeClass('d-none');
 	$('.edit-wrapper').find('button.btn-success').addClass('d-none');
 	$('.edit-wrapper .file-wrap').css('display', 'none');
@@ -272,6 +273,9 @@ function onGoogleLogin() {
 
 function onLogout() {
 	auth.signOut();
+	$(".list-wrapper .list-wrap").empty();
+	$(".edit").empty();
+	onReset($(".edit-wrapper form")[0]);
 }
 
 function onListToggle() {

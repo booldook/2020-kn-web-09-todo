@@ -19,7 +19,7 @@
 
 .list-wrapper .bt-close::after {content: '〉'; display: inline-block;} 
 .list-wrapper .bt-close.active::after {content: '〈'; display: inline-block;} 
-.list-wrapper .add-wrap {flex: 0 0; padding: 0.5em 0; background-color: rgba(255,255,255,0.4); margin: 0.25em; border-radius: 4px; display: flex; align-items: center;}
+.list-wrapper .add-wrap {flex: 0 0; padding: 0.5em 0; background-color: rgba(255,255,255,0.4); margin: 0.25em; border-radius: 4px; display: flex; align-items: center; height: 58px;}
 .list-wrapper .add-wrap > button {background-color: transparent; border: none;}
 .list-wrapper .add-wrap > button:focus {outline: none;}
 .list-wrapper .add-wrap .fa-plus {margin-left: 0.5em; color: #f9f9f9; font-size: 1.75em;}
