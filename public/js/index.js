@@ -70,6 +70,25 @@ function isImg(name) {
 }
 
 /************** 이벤트콜백 ***************/
+function onViewImg(el) {
+	console.log(el);
+	var src = $(el).attr('src');
+	$('.img-wrapper.modal-wrapper img').attr('src', src);
+	$('.img-wrapper.modal-wrapper').css('display', 'flex');
+}
+
+function onFileDelete(el) {
+	var key = $(el).data('key');
+	var file = $(el).data('file');
+	console.log(file);
+	if( confirm("정말로 삭제하시겠습니까?") ) {
+		db.ref('root/todo/'+user.uid+'/'+key).update({file: null});
+		storage.ref().child('storage/'+file.split('_')[0]+'/'+file).delete().then(function(){
+			$('.edit-wrapper .file-wrap').css('display', 'none');
+		});
+	}
+}
+
 function onReset(f) {
 	f.key.value = '';
 	$('.edit-wrapper').find('button.btn-primary').removeClass('d-none');
@@ -81,15 +100,17 @@ function onGetTask(r) {
 	$('.edit-wrapper').find('form input[name="key"]').val(r.key);
 	$('.edit-wrapper').find('form input[name="task"]').val(r.val().task);
 	$('.edit-wrapper').find('form textarea[name="comment"]').val(r.val().comment);
-	if(r.val().file && r.val().oriFile) {
+	if(r.val().file) {
 		$('.edit-wrapper .file-wrap').css('display', 'flex');
-		if(isImg(r.val().oriFile)) {
-			$('.edit-wrapper .file-wrap .image').attr('src', r.val().file).show();
+		$('.edit-wrapper .bt-delete').data('key', r.key);
+		$('.edit-wrapper .bt-delete').data('file', r.val().file.saveName);
+		if(isImg(r.val().file.oriName)) {
+			$('.edit-wrapper .file-wrap .image').attr('src', r.val().file.url).show();
 			$('.edit-wrapper .file-wrap .pds').hide();
 		}
 		else {
 			$('.edit-wrapper .file-wrap .image').hide();
-			$('.edit-wrapper .file-wrap .pds').attr('href', r.val().file).html(r.val().oriFile).show();
+			$('.edit-wrapper .file-wrap .pds').attr('href', r.val().file.url).html(r.val().file.oriName).show();
 		}
 	}
 	else $('.edit-wrapper .file-wrap').css('display', 'none');
@@ -137,8 +158,10 @@ function onEdit(f) {
 			checked: false, 
 		};
 		if(url) {
-			data.file = url;
-			data.oriFile = file.name;
+			data.file = {};
+			data.file.url = url;
+			data.file.oriName = file.name;
+			data.file.saveName = saveName;
 		}
 		if(key == "") {
 			db.ref('root/todo/'+user.uid).push(data);
@@ -261,3 +284,9 @@ moment.locale('ko');
 
 $('#btGoogleLogin').click(onGoogleLogin);
 $('#btLogout').click(onLogout);
+$('.img-wrapper.modal-wrapper img').click(function(e){
+	e.stopPropagation();
+});
+$('.img-wrapper.modal-wrapper').click(function(){
+	$(this).css('display', 'none');
+});

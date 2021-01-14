@@ -52,9 +52,9 @@
 				<input type="text" name="task" class="form-control" placeholder="할일을 입력하세요">
 				<textarea name="comment" class="form-control" placeholder="내용을 입력하세요"></textarea>
 				<div class="file-wrap">
-					<img src="//via.placeholder.com/60" alt="첨부이미지" class="image">
+					<img src="//via.placeholder.com/60" alt="첨부이미지" class="image" onclick="onViewImg(this);">
 					<a href="#" class="pds">파일명.jpg</a>
-					<i class="fa fa-times bt-delete"></i>
+					<i class="fa fa-times bt-delete" onclick="onFileDelete(this);"></i>
 				</div>
 				<input type="file" name="upfile" class="form-control-file">
 				<hr>
@@ -70,6 +70,12 @@
 		<button class="btn btn-danger" id="btGoogleLogin">
 			<i class="fab fa-google mr-2"></i> Google 로그인
 		</button>
+	</div>
+
+	<div class="img-wrapper modal-wrapper">
+		<div class="mw-75">
+			<img src="" alt="이미지" class="mw-100">
+		</div>
 	</div>
 
 	<script src="../js/index.js"></script>

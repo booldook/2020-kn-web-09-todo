@@ -33,10 +33,12 @@
 .edit-wrapper input {margin-bottom: 1em; border-color:yellowgreen;}
 .edit-wrapper textarea {margin-bottom: 1em; height: 50vh; border-color:yellowgreen;}
 .edit-wrapper .file-wrap {padding: 0.5em 0; width: auto; position: relative; display: flex; align-items: flex-start; display: none;}
-.edit-wrapper .file-wrap .image {width: 60px;}
+.edit-wrapper .file-wrap .image {width: 60px; cursor: pointer;}
 .edit-wrapper .file-wrap .pds {margin-right: 0.5em;}
 .edit-wrapper .file-wrap .bt-delete {padding: 0.175em 0.25em; background-color: red; color: #f9f9f9; font-size: 0.875em; cursor: pointer;}
 .edit-wrapper input[name="task"] {font-size: 1.25em;}
+
+.img-wrapper.modal-wrapper {display: none;}
 
 .bt-done {margin: 0.5em 0.25em 0 0; display: inline-block;}
 .bt-done:link,
