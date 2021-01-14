@@ -2,7 +2,7 @@
 var auth = firebase.auth();
 var db = firebase.database();
 var storage = firebase.storage();
-var sRef = storage.ref().child('storage');
+var sRef = null;
 var user = null;
 var ref = null;
 var key = null;
@@ -53,25 +53,46 @@ function toggleList() {
 
 function createFile(name) {
 	var YMD = moment().format('YYYYMMDD');
-	sRef = sRef.child(YMD);
-	var file = YMD+'-'+new Date().getTime()+name;
-	// 20210114-timestamp-Math.random().jpg
-
-	return { saveName: file, oriName: name };
+	sRef = storage.ref().child('storage/'+YMD); // storage/20210114
+	return YMD+'_'+new Date().getTime()+'_'+name;
 }
 
+function isExt(name) {
+	var allowExt = ['jpg', 'jpeg', 'png', 'gif', 'ppt', 'pptx', 'xls', 'xlsx', 'doc', 'docx', 'txt', 'zip', 'tar', 'gz', 'pdf'];
+	var ext = name.split('.').pop().toLowerCase();	//JS -> js
+	return allowExt.indexOf(ext) > -1 ? true : false; 
+}
+
+function isImg(name) {
+	var allowExt = ['jpg', 'jpeg', 'png', 'gif'];
+	var ext = name.split('.').pop().toLowerCase();	//JS -> js
+	return allowExt.indexOf(ext) > -1 ? true : false; 
+}
 
 /************** 이벤트콜백 ***************/
 function onReset(f) {
 	f.key.value = '';
 	$('.edit-wrapper').find('button.btn-primary').removeClass('d-none');
 	$('.edit-wrapper').find('button.btn-success').addClass('d-none');
+	$('.edit-wrapper .file-wrap').css('display', 'none');
 }
 
 function onGetTask(r) {
-	$('.edit-wrapper').find('form input[name="key"]').val( r.key );
-	$('.edit-wrapper').find('form input[name="task"]').val( r.val().task );
-	$('.edit-wrapper').find('form textarea[name="comment"]').val( r.val().comment );
+	$('.edit-wrapper').find('form input[name="key"]').val(r.key);
+	$('.edit-wrapper').find('form input[name="task"]').val(r.val().task);
+	$('.edit-wrapper').find('form textarea[name="comment"]').val(r.val().comment);
+	if(r.val().file && r.val().oriFile) {
+		$('.edit-wrapper .file-wrap').css('display', 'flex');
+		if(isImg(r.val().oriFile)) {
+			$('.edit-wrapper .file-wrap .image').attr('src', r.val().file).show();
+			$('.edit-wrapper .file-wrap .pds').hide();
+		}
+		else {
+			$('.edit-wrapper .file-wrap .image').hide();
+			$('.edit-wrapper .file-wrap .pds').attr('href', r.val().file).html(r.val().oriFile).show();
+		}
+	}
+	else $('.edit-wrapper .file-wrap').css('display', 'none');
 	$('.edit-wrapper').find('button.btn-primary').addClass('d-none');
 	$('.edit-wrapper').find('button.btn-success').removeClass('d-none');
 }
@@ -82,10 +103,21 @@ function onEdit(f) {
 	//파일업로드 처리
 	// console.log(file);
 	// console.log(file[0].name);
-	var file = f.upfile.files[0];
-	var upload = createFile(file.name);
-	var fRef = sRef.child(upload.saveFile);
-	fRef.put(file).on('state_changed', onProgress, onError, onUploaded);
+	if(f.upfile.files[0]) {
+		var file = f.upfile.files[0]; // filedata
+		if(isExt(file.name)) {
+			var saveName = createFile(file.name);
+			var fRef = sRef.child(saveName); // storage/20210114/파일명
+			fRef.put(file).on('state_changed', onProgress, onError, onUploaded);
+		}
+		else {
+			alert("선택한 파일은 업로드할 수 없습니다.");
+			return false;
+		}
+	}
+	else onSave();
+	
+	// file 콜백
 	function onProgress(r) {
 		console.log(r);
 	}
@@ -93,29 +125,30 @@ function onEdit(f) {
 		console.log(e);
 	}
 	function onUploaded() {
-		fRef.getDownloadURL().then(function(url) {
-			$('#img').attr('src', url);
-			console.log('File available at', url);
-		});
+		fRef.getDownloadURL().then(onSave);
 	}
-	/*
-	var key = f.key.value;
-	var data = { 
-		task: f.task.value, 
-		comment: f.comment.value, 
-		createdAt: new Date().getTime(), 
-		checked: false,
-		file:  
-	};
-	if(key == "") {
-		db.ref('root/todo/'+user.uid).push(data);
+
+	function onSave(url) {
+		var key = f.key.value;
+		var data = { 
+			task: f.task.value, 
+			comment: f.comment.value, 
+			createdAt: new Date().getTime(), 
+			checked: false, 
+		};
+		if(url) {
+			data.file = url;
+			data.oriFile = file.name;
+		}
+		if(key == "") {
+			db.ref('root/todo/'+user.uid).push(data);
+		}
+		else {
+			db.ref('root/todo/'+user.uid+'/'+key).update(data);
+		}
+		f.key.value = '';
+		f.reset();
 	}
-	else {
-		db.ref('root/todo/'+user.uid+'/'+key).update(data);
-	}
-	f.key.value = '';
-	f.reset();
-	*/
 	return false;
 }
 
