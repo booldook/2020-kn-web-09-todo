@@ -1,6 +1,8 @@
 /************** 글로벌설정 ***************/
 var auth = firebase.auth();
 var db = firebase.database();
+var storage = firebase.storage();
+var sRef = storage.ref().child('storage');
 var user = null;
 var ref = null;
 var key = null;
@@ -49,6 +51,16 @@ function toggleList() {
 }
 
 
+function createFile(name) {
+	var YMD = moment().format('YYYYMMDD');
+	sRef = sRef.child(YMD);
+	var file = YMD+'-'+new Date().getTime()+name;
+	// 20210114-timestamp-Math.random().jpg
+
+	return { saveName: file, oriName: name };
+}
+
+
 /************** 이벤트콜백 ***************/
 function onReset(f) {
 	f.key.value = '';
@@ -64,13 +76,36 @@ function onGetTask(r) {
 	$('.edit-wrapper').find('button.btn-success').removeClass('d-none');
 }
 
+
+
 function onEdit(f) {
+	//파일업로드 처리
+	// console.log(file);
+	// console.log(file[0].name);
+	var file = f.upfile.files[0];
+	var upload = createFile(file.name);
+	var fRef = sRef.child(upload.saveFile);
+	fRef.put(file).on('state_changed', onProgress, onError, onUploaded);
+	function onProgress(r) {
+		console.log(r);
+	}
+	function onError(e) {
+		console.log(e);
+	}
+	function onUploaded() {
+		fRef.getDownloadURL().then(function(url) {
+			$('#img').attr('src', url);
+			console.log('File available at', url);
+		});
+	}
+	/*
 	var key = f.key.value;
 	var data = { 
 		task: f.task.value, 
 		comment: f.comment.value, 
 		createdAt: new Date().getTime(), 
-		checked: false 
+		checked: false,
+		file:  
 	};
 	if(key == "") {
 		db.ref('root/todo/'+user.uid).push(data);
@@ -80,6 +115,7 @@ function onEdit(f) {
 	}
 	f.key.value = '';
 	f.reset();
+	*/
 	return false;
 }
 
